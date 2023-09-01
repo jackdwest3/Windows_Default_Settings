@@ -21,9 +21,9 @@ if ($ticketResult -and $ticketResult.ticket) {
 
     # Check if the key exists and if it's already set to the desired value
     if ($keyExists -and $currentValue -eq $desiredValue) {
-        Write-Host "Registry key is already set to the desired value."
+        Write-Host "Windows News and Interest Taskbars is turned off."
         # Add note to the ticket
-        $note = "Registry key is already set to the desired value."
+        $note = "Windows News and Interest Taskbars is turned off.<br>"
     }
     else {
         # Create the registry key and value or update the value
@@ -32,17 +32,17 @@ if ($ticketResult -and $ticketResult.ticket) {
         }
         New-ItemProperty -Path $registryPath -Name $registryKeyName -Value $desiredValue -Force
 
-        Write-Host "Registry key and value created or updated."
+        Write-Host "Windows News and Interest Taskbars is turned on > off."
         # Add note to the ticket
-        $note = "Registry key and value created or updated."
+        $note = "Windows News and Interest Taskbars is turned on > off.<br>"
+        # Log activity on the asset
+        Log-Activity -Message "Windows News and Interest Taskbars is turned on > off." -EventName "Registry Key Set" -TicketIdOrNumber $ticketId
     }
 
     # Add time entry with note to the ticket
     Create-Syncro-Ticket-TimerEntry -TicketIdOrNumber $ticketId -StartTime (Get-Date).ToString("o") -DurationMinutes 5 -Notes $note -UserIdOrEmail "your.user.email@here.com" -ChargeTime "false"
-
-    # Log activity on the asset
-    Log-Activity -Message "Checked and set registry key" -EventName "Registry Key Set" -TicketIdOrNumber $ticketId
 }
 else {
-    Write-Host "Failed to create Syncro ticket for setting registry key"
+    # Let know that failed to create ticket in terminal
+    Write-Host "Failed to create Syncro ticket."
 }
