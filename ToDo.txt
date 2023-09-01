@@ -1,0 +1,28 @@
+Services.msc 
+  Sysmain service 
+
+Settings > Accessibility > Visual Effects 
+  Transparency
+  Animations
+  Always show scrollbars (turn on) 
+
+Settings > Privacy
+  Background apps (Windows 10 only) 
+
+Settings > System > Notifications > Notifications
+  Show notifications on lock screen
+  Show reminders and incoming VoiP calls on the lock screen
+
+Settings > System > Notifications > Additional Settings 
+  Show the Windows welcome experience after updates when signed in to show what’s new and suggested 
+  Get tips and suggestions when using Windows 
+
+Settings > Privacy & Security > General
+  Let apps show me personalized ads by using the my advertising ID
+  Let websites show me locally relevant content by accessing my language list
+  Let Windows improve Start and search results by tracking app launches
+  Show me suggested content in the Settings app 
+
+Settings > Privacy & Security > Diagnostics & Feedback
+  Improve inking and typing
+  Tailored experiences 
