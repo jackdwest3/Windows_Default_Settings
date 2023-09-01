@@ -1,6 +1,3 @@
-Services.msc 
-  Sysmain service 
-
 Settings > Accessibility > Visual Effects 
   Transparency
   Animations
