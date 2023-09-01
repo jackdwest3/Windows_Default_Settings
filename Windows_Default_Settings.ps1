@@ -1,6 +1,10 @@
 # Import the Syncro PowerShell module
 Import-Module $env:SyncroModule
 
+# Intialize varibles
+$note = ""
+$userEmail = "jack@westcomputers.com"
+
 # Create a Syncro ticket for setting the registry key
 $ticketResult = Create-Syncro-Ticket -Subject "Set Registry Key" -IssueType "Script Execution" -Status "New"
 
@@ -8,6 +12,7 @@ $ticketResult = Create-Syncro-Ticket -Subject "Set Registry Key" -IssueType "Scr
 if ($ticketResult -and $ticketResult.ticket) {
     $ticketId = $ticketResult.ticket.id
 
+    ########### Windows News and Interest Taskbars ###########
     # Specify the registry path and key details
     $registryPath = "HKCU:\Microsoft\Windows\CurrentVersion\Feeds"
     $registryKeyName = "ShellFeedsTaskbarViewMode"
@@ -23,7 +28,7 @@ if ($ticketResult -and $ticketResult.ticket) {
     if ($keyExists -and $currentValue -eq $desiredValue) {
         Write-Host "Windows News and Interest Taskbars is turned off."
         # Add note to the ticket
-        $note = "Windows News and Interest Taskbars is turned off.<br>"
+        $note += "`nWindows News and Interest Taskbars is turned off."
     }
     else {
         # Create the registry key and value or update the value
@@ -34,13 +39,35 @@ if ($ticketResult -and $ticketResult.ticket) {
 
         Write-Host "Windows News and Interest Taskbars is turned on > off."
         # Add note to the ticket
-        $note = "Windows News and Interest Taskbars is turned on > off.<br>"
+        $note += "`nWindows News and Interest Taskbars is turned on > off."
         # Log activity on the asset
         Log-Activity -Message "Windows News and Interest Taskbars is turned on > off." -EventName "Registry Key Set" -TicketIdOrNumber $ticketId
     }
+    ##########################################################
+
+    ############ Windows SysMain Service Disable #############
+    # Check and handle the SysMain service
+    $sysMainService = Get-Service -Name SysMain -ErrorAction SilentlyContinue
+
+    if ($sysMainService -and $sysMainService.Status -ne "Stopped") {
+        # Stop the SysMain service if it's not already stopped
+        Stop-Service -Name SysMain -Force
+
+        Write-Host "SysMain service stopped."
+
+        # Disable the SysMain service from starting
+        Set-Service -Name SysMain -StartupType Disabled
+
+        Write-Host "SysMain service disabled from starting."
+
+        # Add note to the ticket
+        $note += "`nSysMain service stopped and disabled from starting."
+        # Log activity on the asset
+        Log-Activity -Message "SysMain service disabled from startup." -EventName "Service and Registry Actions" -TicketIdOrNumber $ticketId
+    }
 
     # Add time entry with note to the ticket
-    Create-Syncro-Ticket-TimerEntry -TicketIdOrNumber $ticketId -StartTime (Get-Date).ToString("o") -DurationMinutes 5 -Notes $note -UserIdOrEmail "your.user.email@here.com" -ChargeTime "false"
+    Create-Syncro-Ticket-TimerEntry -TicketIdOrNumber $ticketId -StartTime (Get-Date).ToString("o") -DurationMinutes 5 -Notes $note -UserIdOrEmail $userEmail -ChargeTime "false"
 }
 else {
     # Let know that failed to create ticket in terminal

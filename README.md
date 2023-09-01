@@ -3,3 +3,4 @@ Go through the Windows system and set the desired defaults and settings for best
 
 Turns off the following:
   Windows News and Interest Taskbars
+  SysMain Service
